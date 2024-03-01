@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: database
+    image: mysql:5.7
+    volumes:
+      - ./database:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: service
+      MYSQL_USER: sa
+      MYSQL_PASSWORD: admin
+      MYSQL_DATABASE: airline_v2_1
+  airline-backend:
+    build: .
+    depends_on:
+      - db
+    command: ./airline/backend.sh
+  airline-frontend:
+    build: .
+    ports:
+      - 9000:9000
+    depends_on:
+      - db
+    command: ./airline/frontend.sh
